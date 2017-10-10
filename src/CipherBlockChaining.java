@@ -25,12 +25,10 @@ class CipherBlockChaining {
 
     char[] decrypt(char[] cipherText, char cesarKey){
         char[] decrypted = Arrays.copyOf(cipherText,cipherText.length);
-        for(int i = 0; i < decrypted.length; i++){
+        IntStream.range(0,decrypted.length).forEach(i -> {
             decrypted[i] -= cesarKey; // apply key
-            if(i >= blockSize){
-                decrypted[i] = (char)(decrypted[i] ^ cipherText[i - blockSize]);
-            }
-        }
+            if(i >= blockSize) decrypted[i] = (char)(decrypted[i] ^ cipherText[i - blockSize]);
+        });
         return this.prettify(decrypted);
     }
 
@@ -42,7 +40,7 @@ class CipherBlockChaining {
     }
 
     private String getInitializationVector(){
-        return "xyz";
+        return "xyz"; // should be randomized of course
     }
 
     private char[] prettify(char [] decrypted){
