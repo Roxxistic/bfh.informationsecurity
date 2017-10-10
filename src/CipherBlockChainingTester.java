@@ -1,9 +1,9 @@
 import java.util.Scanner;
 
 /**
- * @author Marc Rey
- * TASK    Please program CBC in Java with JavaStreams.
- * 10.10.2017
+ * Use to try out the cbc-cesar-encryption.
+ * @author  Marc Rey
+ * @version 10.10.2017
  */
 public class CipherBlockChainingTester {
 

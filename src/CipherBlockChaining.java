@@ -2,9 +2,9 @@ import java.util.Arrays;
 import java.util.stream.IntStream;
 
 /**
- * @author Marc Rey
- * TASK    Please program CBC in Java with JavaStreams.
- * 10.10.2017
+ * Implements an example of CBC block cypher mode with a very simple encryption key (cesar).
+ * @author  Marc Rey
+ * @version 10.10.2017
  */
 class CipherBlockChaining {
 
