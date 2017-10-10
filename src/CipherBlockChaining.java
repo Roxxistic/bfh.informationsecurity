@@ -35,23 +35,12 @@ public class CipherBlockChaining {
         System.out.println();
     }
 
-    private char[] prepareForEncryption(String plaintext){
-        char[] prefixed = (this.getInitializationVector() + plaintext).toCharArray();
-        char[] encrypted = new char[plaintext.length() % BLOCK_SIZE == 0 ? plaintext.length() + BLOCK_SIZE : ((plaintext.length() / BLOCK_SIZE + 2)*BLOCK_SIZE)];
-        System.arraycopy(prefixed, 0, encrypted,0,prefixed.length);
-        return prefixed;
-    }
-
     private char[] encrypt(char[] preparedPlainText, char cesarKey)  {
-        IntStream.range(0,preparedPlainText.length-1).forEach(i -> {
+        IntStream.range(0,preparedPlainText.length).forEach(i -> {
             if(i >= BLOCK_SIZE) preparedPlainText[i] = (char) (preparedPlainText[i - BLOCK_SIZE] ^ preparedPlainText[i]); // CBC
             preparedPlainText[i] += cesarKey; // apply key
         });
         return preparedPlainText;
-    }
-
-    private String getInitializationVector(){
-        return "xyz";
     }
 
     private char[] decrypt(char[] cipherText, char cesarKey){
@@ -63,7 +52,25 @@ public class CipherBlockChaining {
                 decrypted[i] = (char)(decrypted[i] ^ cipherText[i - BLOCK_SIZE]);
             }
         }
-        return decrypted;
+        char[] prettified = this.prettify(decrypted);
+        return prettified;
+    }
+
+    private char[] prepareForEncryption(String plaintext){
+        char[] prefixed = (this.getInitializationVector() + plaintext).toCharArray();
+        char[] encrypted = new char[plaintext.length() % BLOCK_SIZE == 0 ? plaintext.length() + BLOCK_SIZE : ((plaintext.length() / BLOCK_SIZE + 2)*BLOCK_SIZE)];
+        System.arraycopy(prefixed, 0, encrypted,0,prefixed.length);
+        return prefixed;
+    }
+
+    private String getInitializationVector(){
+        return "xyz";
+    }
+
+    private char[] prettify(char [] decrypted){
+        char[] prettified = new char[decrypted.length - BLOCK_SIZE];
+        System.arraycopy(decrypted,BLOCK_SIZE,prettified,0,prettified.length);
+        return prettified;
     }
 
     private void printChars(char[] a){
