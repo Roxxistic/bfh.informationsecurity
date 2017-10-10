@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.stream.IntStream;
 
@@ -21,11 +22,8 @@ public class CipherBlockChaining {
         cesarKey = scanner.nextLine().charAt(0);
         scanner.close();
 
-        char[] preparedText = cbc.prepareForEncryption(plainText);
-        System.out.print("Prepared text     : ");
-        cbc.printChars(preparedText);
         System.out.println();
-        char[] encrypted = cbc.encrypt(preparedText, cesarKey);
+        char[] encrypted = cbc.encrypt(plainText, cesarKey);
         System.out.print("Cipher text       : ");
         cbc.printChars(encrypted);
         System.out.println();
@@ -35,32 +33,31 @@ public class CipherBlockChaining {
         System.out.println();
     }
 
-    private char[] encrypt(char[] preparedPlainText, char cesarKey)  {
-        IntStream.range(0,preparedPlainText.length).forEach(i -> {
-            if(i >= BLOCK_SIZE) preparedPlainText[i] = (char) (preparedPlainText[i - BLOCK_SIZE] ^ preparedPlainText[i]); // CBC
-            preparedPlainText[i] += cesarKey; // apply key
+    private char[] encrypt(String plainText, char cesarKey)  {
+        char[] encrypted = prepareForEncryption(plainText);
+        IntStream.range(0,encrypted.length).forEach(i -> {
+            if(i >= BLOCK_SIZE) encrypted[i] = (char) (encrypted[i - BLOCK_SIZE] ^ encrypted[i]); // CBC
+            encrypted[i] += cesarKey; // apply key
         });
-        return preparedPlainText;
+        return encrypted;
     }
 
     private char[] decrypt(char[] cipherText, char cesarKey){
-        char[] decrypted = new char[cipherText.length];
-        System.arraycopy(cipherText,0,decrypted,0,decrypted.length);
+        char[] decrypted = Arrays.copyOf(cipherText,cipherText.length);
         for(int i = 0; i < decrypted.length; i++){
             decrypted[i] -= cesarKey; // apply key
             if(i >= BLOCK_SIZE){
                 decrypted[i] = (char)(decrypted[i] ^ cipherText[i - BLOCK_SIZE]);
             }
         }
-        char[] prettified = this.prettify(decrypted);
-        return prettified;
+        return this.prettify(decrypted);
     }
 
     private char[] prepareForEncryption(String plaintext){
         char[] prefixed = (this.getInitializationVector() + plaintext).toCharArray();
-        char[] encrypted = new char[plaintext.length() % BLOCK_SIZE == 0 ? plaintext.length() + BLOCK_SIZE : ((plaintext.length() / BLOCK_SIZE + 2)*BLOCK_SIZE)];
-        System.arraycopy(prefixed, 0, encrypted,0,prefixed.length);
-        return prefixed;
+        char[] prepared = new char[plaintext.length() % BLOCK_SIZE == 0 ? plaintext.length() + BLOCK_SIZE : ((plaintext.length() / BLOCK_SIZE + 2)*BLOCK_SIZE)];
+        System.arraycopy(prefixed, 0, prepared,0,prefixed.length);
+        return prepared;
     }
 
     private String getInitializationVector(){
@@ -80,18 +77,4 @@ public class CipherBlockChaining {
         }
         System.out.println();
     }
-
-    private void printBin(char[] a){
-        int blockSize = a.length;
-        for(int j = 0; j < blockSize; j++){
-            String binary = Integer.toBinaryString(a[j]) + " ";
-            for(int k = 0; k < 8 - binary.length(); k++){
-                System.out.print("0");
-            }
-            System.out.print(binary);
-        }
-    }
-
-
-
 }
