@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 /**
@@ -40,7 +41,12 @@ class CipherBlockChaining {
     }
 
     private String getInitializationVector(){
-        return "xyz"; // should be randomized of course
+        char[] result = new char[blockSize];
+        Random random = new Random();
+        for(int i = 0; i < blockSize; i++){
+            result[i] = (char)((random.nextInt(128-32))+32);
+        }
+        return result.toString();
     }
 
     private char[] prettify(char [] decrypted){
