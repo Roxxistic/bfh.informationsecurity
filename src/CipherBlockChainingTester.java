@@ -16,7 +16,7 @@ public class CipherBlockChainingTester {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Message to encode : ");
         plainText = scanner.nextLine();
-        System.out.print("Cesar key         : ");
+        System.out.print("Cesar key (1 char): ");
         cesarKey = scanner.nextLine().charAt(0);
         scanner.close();
         char[] encrypted = cbc.encrypt(plainText, cesarKey);

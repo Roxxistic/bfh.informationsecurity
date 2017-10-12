@@ -41,12 +41,12 @@ class CipherBlockChaining {
     }
 
     private String getInitializationVector(){
-        char[] result = new char[blockSize];
+        String result = "";
         Random random = new Random();
-        for(int i = 0; i < blockSize; i++){
-            result[i] = (char)((random.nextInt(128-32))+32);
+        while(result.length() < blockSize){
+            result += (char)((random.nextInt(128-32))+32);
         }
-        return result.toString();
+        return result;
     }
 
     private char[] prettify(char [] decrypted){
