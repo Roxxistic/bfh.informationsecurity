@@ -29,7 +29,7 @@ public class RsaTool {
         System.out.println("Decrypted:  " + decA);
 
         System.out.println("STRING ENCRYPTION");
-        String messageB = "Secret"; // may not be to long!!
+        String messageB = "Secret";
         System.out.println("Plain Text: " + messageB);
         BigInteger encB = rsa.encrypt(new BigInteger(stringToBytes(messageB)),e,p,q);
         System.out.println("Encrypted:  " + encB.toString());
