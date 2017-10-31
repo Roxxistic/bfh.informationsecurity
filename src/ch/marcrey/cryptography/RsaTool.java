@@ -1,34 +1,52 @@
 package ch.marcrey.cryptography;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
 public class RsaTool {
 
+    BigInteger p = new BigInteger("274177");
+    BigInteger q = new BigInteger("616318177");
+    BigInteger e = new BigInteger("82421");
+    BigInteger d = new BigInteger("32399333229149");
+
     public static void main(String[] args){
 
-        Rsa rsaEnc = new Rsa();
+        RsaTool tool = new RsaTool();
+        tool.exec();
+    }
 
-        /*
-        BigInteger m = new BigInteger("24");
-        BigInteger p = new BigInteger("7");
-        BigInteger q = new BigInteger("11");
-        BigInteger e = new BigInteger("37");
-        BigInteger d = new BigInteger("13");
-        */
-        BigInteger m = new BigInteger("123456789");
-        BigInteger p = new BigInteger("274177");
-        BigInteger q = new BigInteger("616318177");
-        BigInteger e = new BigInteger("82421");
-        BigInteger d = new BigInteger("32399333229149");
+    private void exec(){
 
-        BigInteger enc = rsaEnc.encrypt(m,e,p,q);
+        Rsa rsa = new Rsa();
 
-        System.out.println("Encrypted:  " + enc.toString());
+        System.out.println("INTEGER ENCRYPTION");
+        String messageA = "123456789";
+        System.out.println("Plain Text: " + messageA);
+        BigInteger encA = rsa.encrypt(new BigInteger(messageA),e,p,q);
+        System.out.println("Encrypted:  " + encA);
+        BigInteger decA = rsa.encrypt(encA,d,p,q);
+        System.out.println("Decrypted:  " + decA);
 
-        Rsa rsaDec = new Rsa();
+        System.out.println("STRING ENCRYPTION");
+        String messageB = "Secret"; // may not be to long!!
+        System.out.println("Plain Text: " + messageB);
+        BigInteger encB = rsa.encrypt(new BigInteger(stringToBytes(messageB)),e,p,q);
+        System.out.println("Encrypted:  " + encB.toString());
+        BigInteger decB = rsa.encrypt(encB,d,p,q);
+        System.out.println("Decrypted:  " + bytesToString(decB.toByteArray()));
+    }
 
-        BigInteger dec = rsaDec.decrypt(enc,d,p,q);
+    private byte[] stringToBytes(String s){
+        return s.getBytes();
+    }
 
-        System.out.println("Decrypted:  " + dec.toString());
+    private String bytesToString(byte[] b){
+        try {
+            return new String(b, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 }
