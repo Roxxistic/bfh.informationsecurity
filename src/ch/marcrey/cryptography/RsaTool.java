@@ -25,7 +25,7 @@ public class RsaTool {
         System.out.println("Plain Text: " + messageA);
         BigInteger encA = rsa.encrypt(new BigInteger(messageA),e,p,q);
         System.out.println("Encrypted:  " + encA);
-        BigInteger decA = rsa.encrypt(encA,d,p,q);
+        BigInteger decA = rsa.decrypt(encA,d,p,q);
         System.out.println("Decrypted:  " + decA);
 
         System.out.println("STRING ENCRYPTION");
@@ -33,7 +33,7 @@ public class RsaTool {
         System.out.println("Plain Text: " + messageB);
         BigInteger encB = rsa.encrypt(new BigInteger(stringToBytes(messageB)),e,p,q);
         System.out.println("Encrypted:  " + encB.toString());
-        BigInteger decB = rsa.encrypt(encB,d,p,q);
+        BigInteger decB = rsa.decrypt(encB,d,p,q);
         System.out.println("Decrypted:  " + bytesToString(decB.toByteArray()));
     }
 
